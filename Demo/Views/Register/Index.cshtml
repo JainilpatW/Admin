@@ -1,0 +1,69 @@
+﻿@model Demo.Models.DoctorRegisterModel
+@{
+    ViewBag.Title = "Index";
+}
+
+@using (Html.BeginForm("SaveDoctor", "Register", FormMethod.Post))
+{
+    <div class="container" style="margin-top:30px;">
+        <h3><label>Register Doctor</label></h3>
+        <hr />
+        <div class="body-content">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="Name">Doctor Name</label>
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Enter Doctor Name", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="Password">Email Id</label>
+                        @Html.TextBoxFor(model => model.EmailId, new { @class = "form-control", @placeholder = "Enter email", @type = "email", @autocompelete = "off" ,@required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="Password">Password</label>
+                        @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @placeholder = "Enter Password", @type = "password", @required="required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="Password">Confirm Password</label>
+                        @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @placeholder = "Confirm Password", @type = "password", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="MobileNo">Mobile No</label>
+                        @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control", @placeholder = "Enter Mobile No", @required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="Address">Address</label>
+                        @Html.TextBoxFor(model => model.Address, new { @class = "form-control", @placeholder = "Address" , @required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="Doc_Type">Doctor Type</label>
+                        @Html.DropDownListFor(model => model.Doc_Type, ViewBag.DocType as List<SelectListItem>, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="Doc_Type">Doctor Type</label>
+                        @Html.DropDownListFor(model => model.Hospital_Id, ViewBag.Hospitals as List<SelectListItem>, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col float-right">
+                    <input type="submit" id="btnSubmit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+}

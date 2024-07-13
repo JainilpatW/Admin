@@ -1,0 +1,164 @@
+﻿@model Demo.Models.HomeModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row" style="margin-top:50px;">
+    <div class="col">
+        <table class="table table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Patient Name</th>
+                    <th>Age</th>
+                    <th>Mobile No</th>
+                    <th>Email Id</th>
+                    <th>City-State</th>
+                    <th>Address</th>
+                    <th>Doctor Name</th>
+                    <th>Hospital</th>
+                    <th>Appointment Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.lstAppointment != null && Model.lstAppointment.Count > 0)
+                {
+                    for (int i = 0; i < Model.lstAppointment.Count; i++)
+                    {
+                        <tr>
+                            <td>@(i+1)</td>
+                            <td>
+                                <label>@Model.lstAppointment[i].Name</label>
+                                <input type="hidden" id="hdnAppointmentId_@(i)" value="@Model.lstAppointment[i].PatientId" />
+                            </td>
+                            <td>
+                                <label>@Model.lstAppointment[i].Age</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstAppointment[i].MobileNo</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstAppointment[i].Email_Id</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstAppointment[i].City - @Model.lstAppointment[i].State</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstAppointment[i].Address</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstAppointment[i].DocName</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstAppointment[i].HospitalName</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstAppointment[i].App_Date.ToString("dd MMM yyyy hh:mm tt")</label>
+                                <input type="hidden" id="hdnAppDate_@(i)" value="@Model.lstAppointment[i].App_Date.ToString("dd MMM yyyy hh:mm tt")" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="UpdateAppointment(this)">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger" onclick="removeAppointment(this)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update Appointment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md">
+                            <label>Appointment Date</label>
+                            <input type="date" id="txtAppDate" value="" class="form-control" />
+                            <input type="hidden" id="hdnAppId" value="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="UpdateAppointmentDetails();">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var UpdateAppointment = (ctrl) => {
+        var selectedRow = $(ctrl).closest('tr');
+        //debugger
+        var appDate = selectedRow.find('input[type=hidden][id^=hdnAppDate_]').val();
+        var hdnAppointmentId = selectedRow.find('input[type=hidden][id^=hdnAppointmentId_]').val();
+        $('#txtAppDate').val(moment(appDate, 'DD MMM YYYY hh:mm tt').format('YYYY-MM-DD'));
+        $('#hdnAppId').val(hdnAppointmentId);
+
+    }
+
+    var UpdateAppointmentDetails = () => {
+        var jdata = {
+            PatientId: $('#hdnAppId').val(),
+            App_Date: moment($('#txtAppDate').val())
+        };
+        debugger
+         $.ajax({
+            type: "POST",
+             url: "/Home/EditAppointment",
+            data: JSON.stringify(jdata),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.IsSuccess) {
+                    window.location.href = "@Url.Action("Index", "Home")";
+                }
+                //console.log(JSON.stringify(data));
+            },
+            error: function () {
+                alert("Error occured!!")
+            }
+        });
+    }
+
+    var removeAppointment = (ctrl) => {
+        if (!confirm('Are you sure you want to delete appointment?')) {
+            return;
+        }
+        var selectedRow = $(ctrl).closest('tr');
+        //debugger
+        var hdnAppointmentId = selectedRow.find('input[type=hidden][id^=hdnAppointmentId_]').val();
+        debugger
+         $.ajax({
+            type: "POST",
+             url: "/Home/removeAppointment?appointmentId=" + hdnAppointmentId,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.IsSuccess) {
+                    window.location.href = "@Url.Action("Index", "Home")";
+                }
+                //console.log(JSON.stringify(data));
+            },
+            error: function () {
+                alert("Error occured!!")
+            }
+        });
+    }
+</script>

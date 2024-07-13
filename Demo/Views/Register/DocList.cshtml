@@ -1,0 +1,67 @@
+﻿@model Demo.Models.DoctorModel
+@{
+    ViewBag.Title = "DocList";
+}
+<div class="row" style="margin-top:50px;">
+    <div style="float:right;">
+        <a class="btn btn-primary" href="@Url.Action("Index", "Register")">Add Doctor</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Doctor Name</th>
+                    <th>Hospital Name</th>
+                    <th>Mobile No</th>
+                    <th>Email Id</th>
+                    <th>City-State</th>
+                    <th>Address</th>
+                    <th>Specialist</th>
+                    <th> Date&time</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.lstDoctor != null && Model.lstDoctor.Count > 0)
+                {
+                    for (int i = 0; i < Model.lstDoctor.Count; i++)
+                    {
+                        <tr>
+                            <td>@(i+1)</td>
+                            <td>
+                                <label>@Model.lstDoctor[i].Name</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstDoctor[i].Hospital</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstDoctor[i].MobileNo</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstDoctor[i].EmailId</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstDoctor[i].City - @Model.lstDoctor[i].State</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstDoctor[i].Address</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstDoctor[i].Doc_Type</label>
+                            </td>
+                            <td>
+                                <label>@Model.lstDoctor[i].Added_Date.ToString("dd MMM yyyy hh:mm tt")</label>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+</script>
